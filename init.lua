@@ -48,10 +48,11 @@ local function strike_fire(user, pointed_thing)
 							minetest.env:add_node(pointed_thing.under, n_pointed_under)
 						elseif n_pointed_above.name == "air" then
 							minetest.env:add_node(pointed_thing.above, {name="fire:basic_flame"})
+						elseif n_pointed_above.name == "stoneage:bonfire_unlit" then
+							minetest.env:add_node(pointed_thing.above, {name="stoneage:bonfire"})
 						end
 					end
-				end
-					
+				end				
 			else
 				return
 			end
@@ -137,23 +138,36 @@ minetest.register_node("stoneage:torch_unlit", {
 minetest.register_abm({
 	nodenames = {"stoneage:torch_unlit"},
 	neighbors = {"group:igniter", "default:torch"},
-	interval = 3,
+	interval = 1,
 	chance = 5,
-	action = function(pos, node)
+	action = function(pos, node)		
 		node.name = "default:torch"
 		minetest.env:add_node(pos, node)
 	end
 })
 
 -- torchdecay
+-- burntime equals half a night
 if torchdecay then
 minetest.register_abm({
 	nodenames = {"default:torch"},
-	interval = 128,
-	chance = 128,
+	interval = 9,
+	chance = 1,
 	action = function(pos, node)
-		node.name = "stoneage:torch_unlit"
-		minetest.env:add_node(pos, node)
+		local meta = minetest.env:get_meta(pos)
+		local decay = meta:get_int("decay")
+		if not decay then
+			meta:set_int("decay", 1)
+			return
+		end
+		if decay >= math.random(36, 44) then
+			node.name = "stoneage:torch_unlit"
+			minetest.env:add_node(pos, node)
+			meta:set_int("decay", 0)
+			return
+		end
+		decay = decay + 1
+		meta:set_int("decay", decay)
 	end
 })
 end
@@ -227,7 +241,7 @@ minetest.register_node("stoneage:bonfire", {
 
 for _,tinder in ipairs(tinder) do
 	minetest.register_craft({
-		output = 'stoneage:bonfire',
+		output = 'stoneage:bonfire_unlit',
 		recipe = {
 			{'', 'default:stick', ''},
 			{'default:stick', tinder, 'default:stick'},
@@ -238,11 +252,23 @@ end
 if torchdecay then
 minetest.register_abm({
 	nodenames = {"stoneage:bonfire"},
-	interval = 53,
-	chance = 21,
+	interval = 9,
+	chance = 1,
 	action = function(pos, node)
---		node.name = "stoneage:bonfire_unilt"
-		minetest.env:add_node(pos, {name = "stoneage:bonfire_unlit"})
+		local meta = minetest.env:get_meta(pos)
+		local decay = meta:get_int("decay")
+		if not decay then
+			meta:set_int("decay", 1)
+			return
+		end
+		if decay >= math.random(36, 44) then
+			node.name = "stoneage:bonfire_unlit"
+			minetest.env:add_node(pos, node)
+			meta:set_int("decay", 0)
+			return
+		end
+		decay = decay + 1
+		meta:set_int("decay", decay)
 	end
 })
 end
