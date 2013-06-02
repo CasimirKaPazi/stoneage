@@ -46,10 +46,10 @@ local function strike_fire(user, pointed_thing)
 						if n_pointed_under.name == "stoneage:torch_unlit" then
 							n_pointed_under.name = "default:torch"
 							minetest.env:add_node(pointed_thing.under, n_pointed_under)
+						elseif n_pointed_under.name == "stoneage:bonfire_unlit" then
+							minetest.env:add_node(pointed_thing.under, {name="stoneage:bonfire"})
 						elseif n_pointed_above.name == "air" then
 							minetest.env:add_node(pointed_thing.above, {name="fire:basic_flame"})
-						elseif n_pointed_above.name == "stoneage:bonfire_unlit" then
-							minetest.env:add_node(pointed_thing.above, {name="stoneage:bonfire"})
 						end
 					end
 				end				
@@ -189,17 +189,7 @@ minetest.register_node("stoneage:bonfire_unlit", {
 	paramtype = "light",
 	sunlight_propagates = true,
 	walkable = false,
-	drop = "default:coal_lump",
 	groups = {snappy=3,flammable=2,attached_node=1},
-	after_dig_node = function(pos, node, oldmetadata, puncher)
-		local wield = puncher:get_wielded_item():get_name()
-		if wield == "default:torch" then
-			node.name = "stoneage:bonfire"
-			minetest.env:set_node(pos, node)
-			local inv = puncher:get_inventory()
-			inv:remove_item("main", "default:coal_lump")
-		end
-	end,
 	sounds = default.node_sound_defaults(),
 	selection_box = {
 		type = "fixed",
@@ -223,14 +213,9 @@ minetest.register_node("stoneage:bonfire", {
 	damage_per_second = 1,
 	light_source = LIGHT_MAX-1,
 	groups = {dig_immediate=3,igniter=1,attached_node=1},
-	after_place_node = function(pos, placer)
---		fire.on_flame_add_at(pos)
-	end,
 	after_dig_node = function(pos, node, oldmetadata, puncher)
 		node.name = "stoneage:bonfire_unlit"
 		minetest.env:set_node(pos, node)
---		fire.on_flame_remove_at(pos)
-		puncher:set_hp(puncher:get_hp()-3)
 	end,
 	sounds = default.node_sound_defaults(),
 	selection_box = {
@@ -252,7 +237,7 @@ end
 if torchdecay then
 minetest.register_abm({
 	nodenames = {"stoneage:bonfire"},
-	interval = 9,
+	interval = 18,
 	chance = 1,
 	action = function(pos, node)
 		local meta = minetest.env:get_meta(pos)
