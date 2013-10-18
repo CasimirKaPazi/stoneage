@@ -79,7 +79,7 @@ local function generate_ore(name, wherein, minp, maxp, seed, chunks_per_volume, 
 end
 
 minetest.register_on_generated(function(minp, maxp, seed)
-generate_ore("stoneage:grass_with_silex", "default:dirt_with_grass", minp, maxp, seed+485,   	1/23/23/23,    5, -8,  64)
-generate_ore("stoneage:dirt_with_silex", "default:dirt", minp, maxp, seed+485,   				1/23/23/23,    5, -8,  64)
-generate_ore("stoneage:sand_with_silex", "default:sand", minp, maxp, seed+485,   				1/21/21/21,    11, -16,  32)
+generate_ore("stoneage:grass_with_silex", "default:dirt_with_grass", minp, maxp, seed+485,   	1/19/19/19,    5, -8,  64)
+generate_ore("stoneage:dirt_with_silex", "default:dirt", minp, maxp, seed+485,   				1/19/19/19,    5, -8,  64)
+generate_ore("stoneage:sand_with_silex", "default:sand", minp, maxp, seed+485,   				1/17/17/17,    11, -16,  32)
 end)
