@@ -1,10 +1,10 @@
 Stoneage mod for minetest.
 
-by Casimir
+This mod adds basic stoneage tools and makes the start in the world harder. You can make fire and a fireplace. Torches just burn half a day.
 
 licence:
-code - GPL
-textures - cc-by-sa
+code - GPLv3 or later
+textures - CC-BY-SA
 
 stoneage_firestriker_stone.png is based on pixel-land-10 CC0 by pixel32
-stoneage_bonefire_animated and stoneage_bonefire_unlit are based on LPC Fireplace cc-by Lanea Zimmerman
+stoneage_bonefire_animated and stoneage_bonefire_unlit are based on LPC Fireplace CC-BY Lanea Zimmerman
